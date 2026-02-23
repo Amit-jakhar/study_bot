@@ -87,10 +87,10 @@ func main() {
 
 	go func() {
 		// India Location (IST) load karo
-		loc, err := time.LoadLocation("Asia/Kolkata")
+		// loc, err := time.LoadLocation("Asia/Kolkata")
 		if err != nil {
 			log.Println("Error loading location, using UTC fallback:", err)
-			loc = time.UTC
+			// loc = time.UTC
 		}
 
 		for {
