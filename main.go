@@ -60,9 +60,17 @@ func main() {
 
 	// 3. Fixed Time Reminder Logic (Subah 10:30, Raat 10:00 aur 11:00)
 	go func() {
+		// India ka Location load karo
+		loc, err := time.LoadLocation("Asia/Kolkata")
+		if err != nil {
+			log.Println("Error loading location:", err)
+			// Agar server par location load na ho, toh fallback default UTC par rakho
+			loc = time.UTC
+		}
+
 		for {
-			// IST Time ke hisaab se check karega (Agar VPS India ka hai)
-			currentTime := time.Now().Format("15:04")
+			// DHAYAN SE DEKHO: Yahan .In(loc) add kiya hai. Ab red line gayab!
+			currentTime := time.Now().In(loc).Format("15:04")
 
 			if currentTime == "10:30" || currentTime == "22:00" || currentTime == "23:00" {
 				if currentIndex < len(topics) {
@@ -71,11 +79,8 @@ func main() {
 					msg.ParseMode = "Markdown"
 					bot.Send(msg)
 				}
-				// 1.5 minute sleep taaki ek hi minute mein baar-baar message na jaye
 				time.Sleep(90 * time.Second)
 			}
-
-			// Har 30 second mein clock check karega
 			time.Sleep(30 * time.Second)
 		}
 	}()
