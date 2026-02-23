@@ -72,7 +72,7 @@ func main() {
 			// DHAYAN SE DEKHO: Yahan .In(loc) add kiya hai. Ab red line gayab!
 			currentTime := time.Now().In(loc).Format("15:04")
 
-			if currentTime == "10:30" || currentTime == "22:00" || currentTime == "23:00" {
+			if currentTime == "10:30" || currentTime == "14:00" || currentTime == "22:00" || currentTime == "23:00" {
 				if currentIndex < len(topics) {
 					text := "Bhai, Go time! 🚀\n\nAbhi ka topic hai: *" + topics[currentIndex] + "*\n\nKhatam karke 'Done' mark karo!"
 					msg := tgbotapi.NewMessage(myChatID, text)
