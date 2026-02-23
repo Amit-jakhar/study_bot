@@ -59,29 +59,55 @@ func main() {
 	currentIndex := 0
 
 	// 3. Fixed Time Reminder Logic (Subah 10:30, Raat 10:00 aur 11:00)
+	// go func() {
+	// 	// India ka Location load karo
+	// 	loc, err := time.LoadLocation("Asia/Kolkata")
+	// 	if err != nil {
+	// 		log.Println("Error loading location:", err)
+	// 		// Agar server par location load na ho, toh fallback default UTC par rakho
+	// 		loc = time.UTC
+	// 	}
+
+	// 	for {
+	// 		// DHAYAN SE DEKHO: Yahan .In(loc) add kiya hai. Ab red line gayab!
+	// 		currentTime := time.Now().In(loc).Format("15:04")
+
+	// 		if currentTime == "10:30" || currentTime == "22:00" || currentTime == "23:00" {
+	// 			if currentIndex < len(topics) {
+	// 				text := "Bhai, Go time! 🚀\n\nAbhi ka topic hai: *" + topics[currentIndex] + "*\n\nKhatam karke 'Done' mark karo!"
+	// 				msg := tgbotapi.NewMessage(myChatID, text)
+	// 				msg.ParseMode = "Markdown"
+	// 				bot.Send(msg)
+	// 			}
+	// 			time.Sleep(90 * time.Second)
+	// 		}
+	// 		time.Sleep(30 * time.Second)
+	// 	}
+	// }()
+
 	go func() {
-		// India ka Location load karo
+		// India Location (IST) load karo
 		loc, err := time.LoadLocation("Asia/Kolkata")
 		if err != nil {
-			log.Println("Error loading location:", err)
-			// Agar server par location load na ho, toh fallback default UTC par rakho
+			log.Println("Error loading location, using UTC fallback:", err)
 			loc = time.UTC
 		}
 
 		for {
-			// DHAYAN SE DEKHO: Yahan .In(loc) add kiya hai. Ab red line gayab!
-			currentTime := time.Now().In(loc).Format("15:04")
-
-			if currentTime == "10:30" || currentTime == "22:00" || currentTime == "23:00" {
-				if currentIndex < len(topics) {
-					text := "Bhai, Go time! 🚀\n\nAbhi ka topic hai: *" + topics[currentIndex] + "*\n\nKhatam karke 'Done' mark karo!"
-					msg := tgbotapi.NewMessage(myChatID, text)
-					msg.ParseMode = "Markdown"
-					bot.Send(msg)
-				}
-				time.Sleep(90 * time.Second)
+			// Local testing ke liye hum specific time nahi, interval use kar rahe hain
+			if currentIndex < len(topics) {
+				text := "🚀 *Go Study Alert (Test Mode)*\n\nTopic: *" + topics[currentIndex] + "*\n\nBhai padhai shuru kar! Khatam karke 'Done' reply kar."
+				msg := tgbotapi.NewMessage(myChatID, text)
+				msg.ParseMode = "Markdown"
+				bot.Send(msg)
 			}
-			time.Sleep(30 * time.Second)
+
+			// TEST: Har 10 second mein reminder
+			time.Sleep(10 * time.Second)
+
+			// NOTE: Jab bot live karna ho, toh yahan time check wala logic wapas daal dena
+			// currentTime := time.Now().In(loc).Format("15:04")
+			// if currentTime == "10:30" || currentTime == "22:00" || currentTime == "23:00" { ... }
 		}
 	}()
 
